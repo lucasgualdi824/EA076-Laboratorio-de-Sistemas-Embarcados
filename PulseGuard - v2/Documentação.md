@@ -201,11 +201,11 @@ def exibir_dados():
 3. **Servidor Flask**: Execute o servidor Flask no computador ou em um servidor remoto que tenha acesso à rede.
 4. **Execução do Código**: Carregue o código no Raspberry Pi Pico e inicie a execução para começar a monitorar os sinais vitais e a presença do idoso.
 
-Abaixo, são apresentados dois exemplos de medições realizadas exibidas no servidor Flask:
+Abaixo, são apresentados dois exemplos de medições realizadas e exibidas no servidor Flask, o primeiro deles mostra os BPM medidos com disparo de alerta e o segundo com valores medidos que encontram-se dentro do intervalo de segurança pré-definido:
 
 ![Exemplo Tabela Servidor Flask com Alertas](images/tabela_alertas.jpeg)
 
-![Exemplo Tabela Servidor Flask com Medição Normal](images/tabela_alertas.jpeg)
+![Exemplo Tabela Servidor Flask com Medição Normal](images/tabela_normal.jpeg)
 
 ## Sobre o Desenvolvimento
 Os códigos apresentados neste projeto foram desenvolvidos principalmente com base em referências existentes para a configuração e utilização dos sensores mencionados, além de contar com contribuições da ferramenta de inteligência artificial ChatGPT no processo iterativo de correção de erros, especialmente na configuração do Servidor Flask.
