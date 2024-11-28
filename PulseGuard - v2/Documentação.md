@@ -1,7 +1,7 @@
 # PulseGuard - Documentação do Projeto
 
 ## Visão Geral
-O PulseGuard é um sistema projetado para monitorar a saúde de idosos através da medição da frequência cardíaca e da detecção de movimento. Ele utiliza o sensor de pulso **MAX30102** para medir a frequência cardíaca e níveis de oxigênio no sangue, e o sensor de presença **HC-SR501** para detectar atividade. Os dados coletados são enviados para um servidor Flask para monitoramento remoto, proporcionando segurança adicional para idosos que vivem sozinhos e atuando como uma "prova de vida".
+O PulseGuard é um sistema projetado para monitorar a saúde de idosos através da medição da frequência cardíaca e da detecção de movimento. Ele utiliza o sensor de pulso **MAX30102** para medir a frequência cardíaca e a saturação de oxigênio no sangue, e o sensor de presença **HC-SR501** para detectar atividade. Os dados coletados são enviados para um servidor Flask para monitoramento remoto, proporcionando segurança adicional para idosos que vivem sozinhos e atuando como uma "prova de vida".
 
 Este projeto foi desenvolvido por dois estudantes de engenharia elétrica da Universidade Estadual de Campinas (UNICAMP), com o objetivo de criar um monitor de frequência cardíaca e oximetria de fácil acesso e alta precisão. O PulseGuard utiliza tecnologias modernas e componentes acessíveis para proporcionar uma ferramenta eficaz na vigilância da saúde cardiovascular em tempo real.
 
@@ -13,7 +13,7 @@ No Brasil, enfrentamos uma realidade semelhante devido ao rápido envelhecimento
 Inspirados por esses desafios, decidimos desenvolver o PulseGuard para oferecer uma solução tecnológica que monitora a saúde cardiovascular de forma contínua e eficiente. Nosso objetivo é criar uma ferramenta que não apenas auxilia na vigilância da saúde, mas também contribui para a prevenção de situações de risco, promovendo a segurança e o bem-estar dos usuários.
 
 ## Objetivos do Projeto
-- **Monitoramento em Tempo Real**: Capturar e exibir dados contínuos de batimentos cardíacos e níveis de oximetria.
+- **Monitoramento em Tempo Real**: Capturar e exibir dados contínuos de batimentos cardíacos.
 - **Alertas Automatizados**: Emitir alertas visuais e sonoros quando os valores medidos estiverem fora dos parâmetros normais.
 - **Interface Intuitiva**: Disponibilizar uma interface web para visualização e armazenamento dos dados coletados.
 - **Acessibilidade e Facilidade de Uso**: Desenvolver um sistema que possa ser utilizado por pessoas sem conhecimentos técnicos avançados.
@@ -21,7 +21,7 @@ Inspirados por esses desafios, decidimos desenvolver o PulseGuard para oferecer 
 ## Componentes Utilizados
 ### Hardware
 - **BitDogLab (Raspberry Pi Pico)**: Microcontrolador principal, responsável pelo processamento dos dados e comunicação com os demais componentes.
-- **Sensor MAX30102**: Sensor óptico para medição de frequência cardíaca e nível de oxigênio no sangue.
+- **Sensor MAX30102**: Sensor óptico para medição de frequência cardíaca.
 - **Sensor HC-SR501**: Sensor de presença utilizado para detectar movimento.
 - **Conexão Wi-Fi**: Utilizada para enviar os dados coletados para o servidor Flask.
 
@@ -39,7 +39,8 @@ O sistema é composto de três principais subsistemas:
 1. **Monitoramento da Frequência Cardíaca**
     - Utiliza o sensor MAX30102 para medir a frequência cardíaca em intervalos definidos.
     - Os dados são processados para determinar os batimentos por minuto (BPM).
-    - Caso os valores de BPM estejam fora do intervalo esperado, um alerta é emitido.
+    - Caso os valores de BPM estejam fora do intervalo esperado, um alerta é emitido. O intervalo de segurança escolhido foi de 50 a 100 BPM, de forma que qualquer valor abaixo ou acima destes extremos leva a             emissão de alerta. Este intervalo foi definido com base em estudos da American Heart Association (AHA).
+    - Nesta aplicação não a saturação de oxigênio no sangue através da oximetria, assim, ao longo do projeto foi definido um valor padrão de 95% (limiar inferior do intervalo normal para um indivíduo saudável)
 
 2. **Detecção de Movimento**
     - Utiliza o sensor HC-SR501 para detectar se há movimento.
@@ -81,7 +82,7 @@ wlan.connect("iPhone de Lucas", "lucas2002")
 Há uma verificação contínua para garantir que a conexão foi estabelecida antes de prosseguir com o resto do programa.
 
 ### Inicialização do Sensor MAX30102
-O sensor MAX30102 é inicializado e configurado para medir a frequência cardíaca e o nível de oxigênio no sangue. O código realiza uma varredura no barramento I2C para garantir que o sensor está conectado corretamente:
+O sensor MAX30102 é inicializado e configurado para medir a frequência cardíaca. O código realiza uma varredura no barramento I2C para garantir que o sensor está conectado corretamente:
 
 ```python
 i2c = SoftI2C(sda=Pin(16), scl=Pin(17), freq=400000)
@@ -200,6 +201,10 @@ def exibir_dados():
 3. **Servidor Flask**: Execute o servidor Flask no computador ou em um servidor remoto que tenha acesso à rede.
 4. **Execução do Código**: Carregue o código no Raspberry Pi Pico e inicie a execução para começar a monitorar os sinais vitais e a presença do idoso.
 
+Abaixo, são apresentados dois exemplos de medições realizadas exibidas no servidor Flask:
+
+
+
 ## Sobre o Desenvolvimento
 Os códigos apresentados neste projeto foram desenvolvidos principalmente com base em referências existentes para a configuração e utilização dos sensores mencionados, além de contar com contribuições da ferramenta de inteligência artificial ChatGPT no processo iterativo de correção de erros, especialmente na configuração do Servidor Flask.
 
@@ -208,7 +213,9 @@ Durante o desenvolvimento do PulseGuard, a principal dificuldade encontrada foi 
 Como as medições foram realizadas utilizando conexões I2C via GPIO, o uso de jumpers longos introduziu desafios adicionais, como interferências e ruídos elétricos, uma vez que os jumpers podem atuar como antenas e captar ruídos do ambiente. Além disso, o comprimento maior dos fios aumentou a indutância e a capacitância parasitas, degradando a qualidade dos sinais de clock (SCL) e dados (SDA), o que resultou em eventuais leituras incorretas e comprometeu a precisão das medições.
 
 ## Melhorias Futuras
+- **Oximetria**: Incorporação da medição da saturação de oxigênio no sangue do usuário através do MAX30102.
 - **Notificações por SMS**: Enviar notificações automáticas para cuidadores ou familiares quando ocorrerem alertas críticos.
 - **Armazenamento em Nuvem**: Integrar o armazenamento dos dados coletados em um banco de dados na nuvem, para histórico de longo prazo e acesso remoto.
 - **Detecção de Queda**: Adicionar um sensor de queda para melhorar a segurança e fornecer alertas adicionais em casos de emergência.
-- **Integração com Modelo Preditivo de IA**: Implementação de um modelo preditivo baseado em aprendizado de máquina para analisar as tendências nas medições de frequência cardíaca e oximetria ao longo do tempo. Esse modelo poderia identificar padrões normais para cada indivíduo e detectar anomalias ou desvios significativos em relação às medições rotineiras. Ao detectar tais desvios, o sistema seria capaz de emitir alertas preventivos, informando cuidadores e familiares sobre possíveis problemas de saúde antes que se tornem críticos. 
+- **Integração com Modelo Preditivo de IA**: Implementação de um modelo preditivo baseado em aprendizado de máquina para analisar as tendências nas medições de frequência cardíaca e oximetria ao longo do tempo. Esse modelo poderia identificar padrões normais para cada indivíduo e detectar anomalias ou desvios significativos em relação às medições rotineiras. Ao detectar tais desvios, o sistema seria capaz de emitir alertas preventivos, informando cuidadores e familiares sobre possíveis problemas de saúde antes que se tornem críticos.
+- **Definição Personalizada**: Ajustar os limites de BPM de acordo com o perfil de saúde do usuário. A faixa segura pode ser adaptada por meio de uma configuração inicial, onde um profissional de saúde possa definir os valores ideais para cada usuário individual.
