@@ -90,7 +90,7 @@ def main():
     # Configuração do Wi-Fi
     wlan = network.WLAN(network.STA_IF)
     wlan.active(True)
-    wlan.connect("iPhone de Lucas", "lucas2002")
+    wlan.connect("Nome da Rede", "Senha da Rede")
     print("Conectando-se à rede Wi-Fi...")
     while not wlan.isconnected():
         sleep(1)
