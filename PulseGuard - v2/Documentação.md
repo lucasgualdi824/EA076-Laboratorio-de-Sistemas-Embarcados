@@ -203,7 +203,9 @@ def exibir_dados():
 
 Abaixo, são apresentados dois exemplos de medições realizadas exibidas no servidor Flask:
 
+![Exemplo Tabela Servidor Flask com Alertas](images/tabela_alertas.jpeg)
 
+![Exemplo Tabela Servidor Flask com Medição Normal](images/tabela_alertas.jpeg)
 
 ## Sobre o Desenvolvimento
 Os códigos apresentados neste projeto foram desenvolvidos principalmente com base em referências existentes para a configuração e utilização dos sensores mencionados, além de contar com contribuições da ferramenta de inteligência artificial ChatGPT no processo iterativo de correção de erros, especialmente na configuração do Servidor Flask.
