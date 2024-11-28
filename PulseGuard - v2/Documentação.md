@@ -1,18 +1,27 @@
 # PulseGuard - Documentação do Projeto
 
 ## Visão Geral
-PulseGuard é um sistema projetado para monitorar a saúde de idosos através da medição da frequência cardíaca e da detecção de movimento. Ele utiliza o sensor de pulso **MAX30102** para medir a frequência cardíaca e níveis de oxigênio no sangue, e o sensor de presença **HC-SR501** para detectar atividade. Os dados coletados são enviados para um servidor Flask para monitoramento remoto, proporcionando segurança adicional para idosos que vivem sozinhos.
+O PulseGuard é um sistema projetado para monitorar a saúde de idosos através da medição da frequência cardíaca e da detecção de movimento. Ele utiliza o sensor de pulso **MAX30102** para medir a frequência cardíaca e níveis de oxigênio no sangue, e o sensor de presença **HC-SR501** para detectar atividade. Os dados coletados são enviados para um servidor Flask para monitoramento remoto, proporcionando segurança adicional para idosos que vivem sozinhos e atuando como uma "prova de vida".
+
+Este projeto foi desenvolvido por dois estudantes de engenharia elétrica da Universidade Estadual de Campinas (UNICAMP), com o objetivo de criar um monitor de frequência cardíaca e oximetria de fácil acesso e alta precisão. O PulseGuard utiliza tecnologias modernas e componentes acessíveis para proporcionar uma ferramenta eficaz na vigilância da saúde cardiovascular em tempo real.
+
+## Motivação do Projeto
+A notícia publicada pela Exame ("Japão registra 40 mil pessoas mortas sozinhas em casa — 10% delas descobertas um mês após a morte", em 30 de agosto de 2024) destaca a alarmante tendência de indivíduos, especialmente idosos, a falecerem sozinhos em suas residências no Japão. Esse fenômeno, conhecido como "kodokushi", reflete desafios sociais significativos, como o isolamento, a falta de suporte familiar e a escassez de serviços de monitoramento de saúde acessíveis.
+
+No Brasil, enfrentamos uma realidade semelhante devido ao rápido envelhecimento da população. Segundo dados do Instituto Brasileiro de Geografia e Estatística (IBGE), a população idosa no país está em constante crescimento, representando uma parcela cada vez maior da sociedade. Em 2020, havia aproximadamente 29 milhões de idosos no Brasil, e essa tendência deve continuar nas próximas décadas, aumentando a demanda por serviços de saúde, apoio social e tecnologias que promovam a qualidade de vida e a autonomia dessa parcela da população (IBGE, 2021).
+
+Inspirados por esses desafios, decidimos desenvolver o PulseGuard para oferecer uma solução tecnológica que monitora a saúde cardiovascular de forma contínua e eficiente. Nosso objetivo é criar uma ferramenta que não apenas auxilia na vigilância da saúde, mas também contribui para a prevenção de situações de risco, promovendo a segurança e o bem-estar dos usuários.
 
 ## Objetivos do Projeto
-- Monitorar a frequência cardíaca e o nível de oxigênio no sangue dos idosos.
-- Emitir alertas quando a frequência cardíaca estiver fora dos valores normais.
-- Detectar a presença e o movimento do idoso, enviando notificações caso o movimento não seja detectado dentro de um período de tempo esperado.
-- Fornecer uma interface web para visualização dos dados coletados em tempo real.
+- **Monitoramento em Tempo Real**: Capturar e exibir dados contínuos de batimentos cardíacos e níveis de oximetria.
+- **Alertas Automatizados**: Emitir alertas visuais e sonoros quando os valores medidos estiverem fora dos parâmetros normais.
+- **Interface Intuitiva**: Disponibilizar uma interface web para visualização e armazenamento dos dados coletados.
+- **Acessibilidade e Facilidade de Uso**: Desenvolver um sistema que possa ser utilizado por pessoas sem conhecimentos técnicos avançados.
 
 ## Componentes Utilizados
 ### Hardware
-- **Raspberry Pi Pico**: Microcontrolador principal.
-- **Sensor MAX30102**: Sensor óptico para medição de frequência cardíaca e nível de oxigênio.
+- **BitDogLab (Raspberry Pi Pico)**: Microcontrolador principal, responsável pelo processamento dos dados e comunicação com os demais componentes.
+- **Sensor MAX30102**: Sensor óptico para medição de frequência cardíaca e nível de oxigênio no sangue.
 - **Sensor HC-SR501**: Sensor de presença utilizado para detectar movimento.
 - **Conexão Wi-Fi**: Utilizada para enviar os dados coletados para o servidor Flask.
 
@@ -21,6 +30,7 @@ PulseGuard é um sistema projetado para monitorar a saúde de idosos através da
 - **urequests**: Para enviar requisições HTTP ao servidor Flask.
 - **machine**: Para configurar os pinos GPIO e o I2C.
 - **utime**: Para manipulação de temporização e controle de intervalos.
+- **max30102.py**: Drivers para o sensor MAX30102.
 
 ## Arquitetura do Sistema
 
@@ -38,6 +48,24 @@ O sistema é composto de três principais subsistemas:
 3. **Servidor Flask para Coleta de Dados**
     - O servidor Flask recebe os dados do PulseGuard via requisições HTTP PUT.
     - Os dados recebidos são armazenados em uma lista e exibidos em uma página web, facilitando o monitoramento pelos familiares ou cuidadores.
+
+## Esquema de Conexões (Hardware)
+
+Para montar o PulseGuard, foram realizadas as seguintes conexões entre a BitDogLab e os componentes periféricos:
+
+- **MAX30102**:
+  - **VCC** -> 3V3
+  - **GND** -> GND
+  - **SDA** -> GPIO16
+  - **SCL** -> GPIO17
+
+- **HC-SR501**:
+  - **VCC** -> 5V
+  - **GND** -> GND
+  - **OUT** -> GPIO 20
+
+## Shield para Conexão dos Sensores
+A conexão dos sensores **MAX30102** e **HC-SR501** à BitDogLab foi realizada através de um **shield** projetado especificamente para comportar ambos os sensores. Este shield facilita a montagem e manutenção do sistema, garantindo conexões seguras e organizadas. Além disso, o shield utiliza um **cabo flat IDC** de 14 pinos, que permite uma conexão rápida e eficiente entre o microcontrolador e os sensores. Essa abordagem torna o sistema mais modular e fácil de ser reproduzido, além de reduzir a quantidade de fios soltos e minimizar o risco de falhas de conexão.
 
 ## Explicação do Código
 
@@ -63,7 +91,7 @@ sensor = MAX30102(i2c=i2c)
 Se o sensor for detectado, ele é configurado para começar as medições.
 
 ### Inicialização do Sensor de Presença HC-SR501
-O sensor de presença **HC-SR501** é conectado ao pino GPIO 20 configurado como entrada:
+O sensor de presença **HC-SR501** é conectado a um pino GPIO configurado como entrada:
 
 ```python
 sensor_presenca_pin = Pin(20, Pin.IN)
@@ -167,21 +195,20 @@ def exibir_dados():
 ```
 
 ## Como Executar o Projeto
-1. **Configuração do Ambiente**: Conecte os sensores MAX30102 e HC-SR501 ao microcontrolador (Raspberry Pi Pico).
+1. **Configuração do Ambiente**: Conecte os sensores MAX30102 e HC-SR501 ao microcontrolador (BitDogLab).
 2. **Rede Wi-Fi**: Configure o código para se conectar à rede Wi-Fi local, alterando o SSID e a senha.
 3. **Servidor Flask**: Execute o servidor Flask no computador ou em um servidor remoto que tenha acesso à rede.
 4. **Execução do Código**: Carregue o código no Raspberry Pi Pico e inicie a execução para começar a monitorar os sinais vitais e a presença do idoso.
 
-## Melhoria Futuras
+## Sobre o Desenvolvimento
+Os códigos apresentados neste projeto foram desenvolvidos principalmente com base em referências existentes para a configuração e utilização dos sensores mencionados, além de contar com contribuições da ferramenta de inteligência artificial ChatGPT no processo iterativo de correção de erros, especialmente na configuração do Servidor Flask.
+
+Durante o desenvolvimento do PulseGuard, a principal dificuldade encontrada foi a configuração do sensor de frequência cardíaca e oximetria MAX30102. O modelo inicialmente adquirido apresentou limitações significativas, tanto na consistência do funcionamento quanto na precisão das medições. Após a aquisição de um novo e diferente modelo, a configuração tornou-se mais fácil e intuitiva, resultando em um aumento substancial na precisão das leituras de batimentos cardíacos. No entanto, a troca do sensor exigiria adaptações na conexão ao shield projetado que não puderam ser realizadas em tempo hábil, devido à mudança na localização física dos pinos conectores, tornando necessário o uso de jumpers.
+
+Como as medições foram realizadas utilizando conexões I2C via GPIO, o uso de jumpers longos introduziu desafios adicionais, como interferências e ruídos elétricos, uma vez que os jumpers podem atuar como antenas e captar ruídos do ambiente. Além disso, o comprimento maior dos fios aumentou a indutância e a capacitância parasitas, degradando a qualidade dos sinais de clock (SCL) e dados (SDA), o que resultou em eventuais leituras incorretas e comprometeu a precisão das medições.
+
+## Melhorias Futuras
 - **Notificações por SMS**: Enviar notificações automáticas para cuidadores ou familiares quando ocorrerem alertas críticos.
 - **Armazenamento em Nuvem**: Integrar o armazenamento dos dados coletados em um banco de dados na nuvem, para histórico de longo prazo e acesso remoto.
 - **Detecção de Queda**: Adicionar um sensor de queda para melhorar a segurança e fornecer alertas adicionais em casos de emergência.
-
-## Contribuições
-Contribuições são bem-vindas! Sinta-se à vontade para abrir **Issues** e **Pull Requests** para melhorias e correções. Por favor, siga as diretrizes de contribuição descritas no arquivo `CONTRIBUTING.md`.
-
-## Licença
-Este projeto está licenciado sob a Licença MIT. Consulte o arquivo `LICENSE` para obter mais informações.
-
----
-Esta documentação descreve detalhadamente o funcionamento do PulseGuard, facilitando a manutenção e o desenvolvimento futuro. Se você tiver dúvidas ou sugestões de melhorias, contribua através do repositório no GitHub!
+- **Integração com Modelo Preditivo de IA**: Implementação de um modelo preditivo baseado em aprendizado de máquina para analisar as tendências nas medições de frequência cardíaca e oximetria ao longo do tempo. Esse modelo poderia identificar padrões normais para cada indivíduo e detectar anomalias ou desvios significativos em relação às medições rotineiras. Ao detectar tais desvios, o sistema seria capaz de emitir alertas preventivos, informando cuidadores e familiares sobre possíveis problemas de saúde antes que se tornem críticos. 
