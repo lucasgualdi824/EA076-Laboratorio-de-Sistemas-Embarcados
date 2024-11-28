@@ -40,7 +40,7 @@ O sistema é composto de três principais subsistemas:
     - Utiliza o sensor MAX30102 para medir a frequência cardíaca em intervalos definidos.
     - Os dados são processados para determinar os batimentos por minuto (BPM).
     - Caso os valores de BPM estejam fora do intervalo esperado, um alerta é emitido. O intervalo de segurança escolhido foi de 50 a 100 BPM, de forma que qualquer valor abaixo ou acima destes extremos leva a             emissão de alerta. Este intervalo foi definido com base em estudos da American Heart Association (AHA).
-    - Nesta aplicação não a saturação de oxigênio no sangue através da oximetria, assim, ao longo do projeto foi definido um valor padrão de 95% (limiar inferior do intervalo normal para um indivíduo saudável)
+    - Nesta aplicação não foi medida a saturação de oxigênio no sangue através da oximetria, assim, ao longo do projeto foi definido um valor padrão de 95% (limiar inferior do intervalo normal para um indivíduo saudável)
 
 2. **Detecção de Movimento**
     - Utiliza o sensor HC-SR501 para detectar se há movimento.
