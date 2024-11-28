@@ -76,7 +76,7 @@ O código primeiro se conecta a uma rede Wi-Fi, necessária para enviar os dados
 ```python
 wlan = network.WLAN(network.STA_IF)
 wlan.active(True)
-wlan.connect("iPhone de Lucas", "lucas2002")
+wlan.connect("Nome da Rede", "Senha da Rede")
 ```
 
 Há uma verificação contínua para garantir que a conexão foi estabelecida antes de prosseguir com o resto do programa.
