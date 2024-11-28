@@ -1,4 +1,4 @@
-#Fluxograma codigo_principal.py
+#Fluxograma main_bpm_presenca.py
 
 ```mermaid
 graph TD
@@ -14,7 +14,7 @@ graph TD
     I --> K[Inicializar HeartRateMonitor];
     K --> L[Configurar Intervalo de Cálculo 15s];
     L --> M[Loop Infinito];
-    M --> N[Checar Novas Leituras do Sensor];
+    M --> N[Checar Novas Leituras do Sensor MAX30102];
     N --> O{Leituras Disponíveis?};
     O -- Sim --> P[Adicionar Amostra ao Monitor];
     O -- Não --> Q[Continuar Loop];
@@ -31,9 +31,17 @@ graph TD
     Z --> AB[Resetar Variáveis de Acumulação];
     AA --> AB;
     AB --> AC[Resetar Tempo de Referência];
-    AC --> M;
-    AD[Continuar Loop] --> M;
+    AC --> AD[Checar Sensor de Presença HC-SR501];
+    AD --> AE{Movimento Detectado?};
+    AE -- Sim --> AF[Enviar Alerta de Presença para o Servidor];
+    AF --> AG{Envio Bem-sucedido?};
+    AG -- Sim --> AH[Imprimir Sucesso];
+    AG -- Não --> AI[Imprimir Erro];
+    AH --> AJ[Continuar Loop];
+    AI --> AJ;
+    AE -- Não --> AJ;
     Q --> M;
+    AJ --> M;
 
 
 ```
