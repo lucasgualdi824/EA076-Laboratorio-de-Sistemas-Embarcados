@@ -65,7 +65,7 @@ Para montar o PulseGuard, foram realizadas as seguintes conexões entre a BitDog
   - **OUT** -> GPIO 20
 
 ## Shield para Conexão dos Sensores
-A conexão dos sensores **MAX30102** e **HC-SR501** à BitDogLab foi realizada através de um **shield** projetado especificamente para comportar ambos os sensores. Este shield facilita a montagem e manutenção do sistema, garantindo conexões seguras e organizadas. Além disso, o shield utiliza um **cabo flat IDC** de 14 pinos, que permite uma conexão rápida e eficiente entre o microcontrolador e os sensores. Essa abordagem torna o sistema mais modular e fácil de ser reproduzido, além de reduzir a quantidade de fios soltos e minimizar o risco de falhas de conexão.
+A conexão dos sensores **MAX30102** e **HC-SR501** à BitDogLab foi realizada através de um **shield** projetado especificamente para comportar ambos os sensores e conectar os terminais 3V3, 5V, GPIO17, GPIO18 e GPIO20. Este shield facilita a montagem e manutenção do sistema, garantindo conexões seguras e organizadas. Além disso, o shield utiliza um **cabo flat com conectores IDC** de 14 pinos, que permite uma conexão rápida e eficiente entre o microcontrolador e os sensores. Essa abordagem torna o sistema mais modular e fácil de ser reproduzido, além de reduzir a quantidade de fios soltos e minimizar o risco de falhas de conexão. O arquivo utilizado para produção da placa encontra-se junto aos códigos nesta página do GitHub.
 
 ## Explicação do Código
 
